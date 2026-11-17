@@ -1,0 +1,14 @@
+{
+  "ssid": "roodkapje_meent_2010",
+  "chapter": "02",
+  "title": "Meent",
+  "years": "2010–2013",
+  "intro": "You are standing near the old brewery building on the Meent. Roodkapje was here for three years, with Burgertrut downstairs funding the rest. The upstairs spaces were already empty when they arrived.",
+  "lease_minutes": 30,
+  "enter_label": "enter",
+  "kapsalons": ["KNIP", "FOHN", "SCHAAR"],
+  "kapsalon_minutes": 5,
+  "kapsalon_revives": true,
+  "next_hint": "The next network is called roodkapje_teilinger_2013. Its password is the name of the bar Erik insisted on, in lowercase, no spaces.",
+  "server_ip": "10.0.0.1"
+}

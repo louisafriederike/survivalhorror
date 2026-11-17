@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meent</title>
+<style>
+  body { margin:0; background:#3a2cf5; color:#d6e6d3;
+         font:16px/1.6 ui-monospace, "Courier New", monospace; }
+  main { max-width:32rem; margin:0 auto; padding:24px 16px; }
+  .box { background:#111; border:2px solid #b8ad3c; border-radius:8px;
+         padding:12px 14px; margin-bottom:14px; }
+  input, button { font:inherit; padding:8px; border-radius:4px; }
+  input { border:0; background:#c8cdb8; text-transform:uppercase; width:60%; }
+  button { border:2px solid #b8ad3c; background:#111; color:#d6e6d3; }
+</style>
+</head><body><main>
+<div class="box">
+  Placeholder. Replace this folder with your own interface (index.html + its files).<br>
+  lease: <span id="lease">…</span>
+</div>
+
+<!-- Example kapsalon code entry. Copy the idea into your own design. -->
+<div class="box">
+  kapsalon code:<br>
+  <input id="code" autocomplete="off" autocapitalize="characters" spellcheck="false">
+  <button id="renew">renew</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+  var left = 0, el = document.getElementById('lease');
+
+  function show() {
+    if (left <= 0) { location.href = '/'; return; }   // back to the entry screen
+    var m = Math.floor(left / 60), s = left % 60;
+    el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  // The server keeps the real time; ask it once, then count down locally.
+  fetch('/lease').then(function (r) { return r.json(); }).then(function (d) {
+    left = d.remaining; show();
+    setInterval(function () { left--; show(); }, 1000);
+  });
+
+  document.getElementById('renew').onclick = function () {
+    fetch('/kapsalon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: document.getElementById('code').value })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      document.getElementById('msg').textContent = d.message;  // e.g. "lease renewed +5:00"
+      left = d.remaining; show();
+      if (d.ok) document.getElementById('code').value = '';
+    });
+  };
+</script>
+</main></body></html>
